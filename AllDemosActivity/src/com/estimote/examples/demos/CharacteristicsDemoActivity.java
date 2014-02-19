@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.adhub.R;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.connection.BeaconConnection;
 

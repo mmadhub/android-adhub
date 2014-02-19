@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.adhub.R;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.Utils;
 

@@ -1,5 +1,7 @@
 package com.estimote.examples.demos;
 
+import com.adhub.R;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;

@@ -1,5 +1,7 @@
 package com.estimote.examples.demos;
 
+import com.adhub.R;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

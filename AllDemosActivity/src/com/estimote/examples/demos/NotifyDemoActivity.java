@@ -11,6 +11,8 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.adhub.R;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
