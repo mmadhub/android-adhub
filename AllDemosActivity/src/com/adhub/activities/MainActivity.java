@@ -11,6 +11,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.adhub.R;
+import com.adhub.services.BootCompletedReceiver;
+import com.adhub.services.SearchBeaconService;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
@@ -30,21 +32,6 @@ public class MainActivity extends Activity {
 
 		// Configure BeaconManager.
 		beaconManager = new BeaconManager(this);
-		beaconManager.setRangingListener(new BeaconManager.RangingListener() {
-			@Override
-			public void onBeaconsDiscovered(Region region, final List<Beacon> beacons) {
-				// Note that results are not delivered on UI thread.
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						// Note that beacons reported here are already sorted by
-						// estimated
-						// distance between device and beacon.
-						
-					}
-				});
-			}
-		});
 	}
 
 	@Override
@@ -62,30 +49,15 @@ public class MainActivity extends Activity {
 			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
 		} else {
-			connectToService();
+			SearchBeaconService searchBeaconService = SearchBeaconService.getInstance(this);
 		}
-	}
-
-	private void connectToService() {
-		getActionBar().setSubtitle("Scanning...");
-		beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
-			@Override
-			public void onServiceReady() {
-				try {
-					beaconManager.startRanging(ALL_ESTIMOTE_BEACONS_REGION);
-				} catch (RemoteException e) {
-					Toast.makeText(MainActivity.this, "Cannot start ranging, something terrible happened", Toast.LENGTH_LONG).show();
-					Log.e("Error", "Cannot start ranging", e);
-				}
-			}
-		});
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_ENABLE_BT) {
 			if (resultCode == Activity.RESULT_OK) {
-				connectToService();
+				SearchBeaconService searchBeaconService = SearchBeaconService.getInstance(this);
 			} else {
 				Toast.makeText(this, "Bluetooth not enabled", Toast.LENGTH_LONG).show();
 				getActionBar().setSubtitle("Bluetooth not enabled");
