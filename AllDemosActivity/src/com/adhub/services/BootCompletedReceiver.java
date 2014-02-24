@@ -15,6 +15,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 		if (beaconManager.hasBluetooth() && beaconManager.isBluetoothEnabled()) {
 			Toast.makeText(context, "Bluetooth enabled", Toast.LENGTH_LONG).show();
 			SearchBeaconService searchBeaconService = SearchBeaconService.getInstance(context);
+			searchBeaconService.startService();
 		} else {
 			Toast.makeText(context, "Bluetooth disabled", Toast.LENGTH_LONG).show();
 		}

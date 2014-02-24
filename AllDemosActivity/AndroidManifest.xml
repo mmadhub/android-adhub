@@ -21,17 +21,12 @@
 
     <application
         android:allowBackup="true"
-        android:label="Estimote Demos"
+        android:label="AdHub"
         android:theme="@android:style/Theme.Holo.Light" >
         <activity
             android:name="com.estimote.examples.demos.AllDemosActivity"
             android:label="Estimote Demos"
             android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.estimote.examples.demos.ListBeaconsActivity"
@@ -51,8 +46,13 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.adhub.activities.MainActivity"
-            android:label="Main"
+            android:label="AdHub"
             android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <!-- Estimote service responsible for scanning beacons. -->

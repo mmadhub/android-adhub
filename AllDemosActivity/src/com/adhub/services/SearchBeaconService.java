@@ -10,6 +10,7 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.adhub.listeners.NotificationListener;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
@@ -17,14 +18,37 @@ import com.estimote.sdk.Region;
 public class SearchBeaconService {
 
 	private static SearchBeaconService instance;
-	private static Context context;
+	private Context context;
 
 	private static final String ESTIMOTE_BEACON_PROXIMITY_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FE6D";
 	private static final Region ALL_ESTIMOTE_BEACONS_REGION = new Region("rid", ESTIMOTE_BEACON_PROXIMITY_UUID, null, null);
 
 	private BeaconManager beaconManager;
 
+	private NotificationListener notificationListener;
+
+	private boolean serviceStarted;
+
 	private SearchBeaconService() {
+	}
+
+	private SearchBeaconService(Context context) {
+		this.context = context;
+	}
+
+	public static SearchBeaconService getInstance(Context context) {
+		if (instance == null) {
+			instance = new SearchBeaconService(context);
+		}
+
+		return instance;
+	}
+
+	public void startService() {
+		if (serviceStarted) {
+			return;
+		}
+
 		// Configure BeaconManager.
 
 		beaconManager = new BeaconManager(context);
@@ -34,39 +58,36 @@ public class SearchBeaconService {
 				// Note that beacons reported here are already sorted by
 				// estimated
 				// distance between device and beacon.
-				try {
-					Thread.sleep(5000);
 
-					ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+				if (beacons.size() == 0) {
+					return;
+				}
 
-					List<RunningTaskInfo> services = activityManager.getRunningTasks(Integer.MAX_VALUE);
+				// buscar propaganda no servidor
+				// verificar se já está no cache
+				// se não estiver, cachear e notificar
 
-					String activity = services.get(0).topActivity.toString();
+				// *******************************************//
 
-					PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+				if (notificationListener != null) {
+					notificationListener.updateNotificationCounter();
+				}
 
-					if (activity.contains("ComponentInfo{com.adhub") == true && powerManager.isScreenOn()) {
-						Toast.makeText(context, "Activity is in foreground, active", Toast.LENGTH_LONG).show();
-					} else {
-						Toast.makeText(context, "Activity is in background, active", Toast.LENGTH_LONG).show();
-					}
+				ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
-				} catch (Exception e) {
-					e.printStackTrace();
+				List<RunningTaskInfo> services = activityManager.getRunningTasks(Integer.MAX_VALUE);
+
+				String activity = services.get(0).topActivity.toString();
+
+				PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+
+				if (activity.contains("ComponentInfo{com.adhub") == false || !powerManager.isScreenOn()) {
+					// criar notificação informando que tem uma nova propaganda
 				}
 			}
 		});
 
 		connectToService();
-	}
-
-	public static SearchBeaconService getInstance(Context context) {
-		if (instance == null) {
-			SearchBeaconService.context = context;
-			instance = new SearchBeaconService();
-		}
-
-		return instance;
 	}
 
 	private void connectToService() {
@@ -81,6 +102,14 @@ public class SearchBeaconService {
 				}
 			}
 		});
+	}
+
+	public NotificationListener getNotificationListener() {
+		return notificationListener;
+	}
+
+	public void setNotificationListener(NotificationListener notificationListener) {
+		this.notificationListener = notificationListener;
 	}
 
 }
