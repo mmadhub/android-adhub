@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="48dp"
+    android:layout_height="fill_parent"
+    android:layout_gravity="right"
+    android:paddingRight="16dp" >
+
+    <!-- Menu Item Image -->
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="fill_parent"
+        android:clickable="true"
+        android:onClick="toNotifications"
+        android:src="@drawable/notify" />
+
+    <!-- Badge Count -->
+
+    <TextView
+        android:id="@+id/actionbar_notifcation_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="5dp"
+        android:background="#FF0000"
+        android:gravity="center"
+        android:minWidth="20dp"
+        android:text="12"
+        android:textColor="#FFFFFF" />
+
+</RelativeLayout>

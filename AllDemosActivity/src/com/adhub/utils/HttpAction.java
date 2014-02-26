@@ -2,6 +2,7 @@ package com.adhub.utils;
 
 import java.io.IOException;
 
+import android.util.Log;
 import ch.boye.httpclientandroidlib.HttpEntity;
 import ch.boye.httpclientandroidlib.HttpResponse;
 import ch.boye.httpclientandroidlib.HttpVersion;
@@ -31,6 +32,9 @@ public class HttpAction {
 	private static DefaultHttpClient httpGetClient;
 
 	public static HttpEntity GET(String url) throws ClientProtocolException, IOException {
+		
+		Log.e("url", "xxx " + url);
+		
 		HttpResponse httpResponse;
 		HttpGet httpGet;
 		HttpEntity entity;

@@ -3,16 +3,14 @@ package com.adhub.activities;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.adhub.R;
-import com.adhub.listeners.NotificationListener;
 import com.adhub.services.SearchBeaconService;
 import com.estimote.sdk.BeaconManager;
 
-public class MainActivity extends Activity implements NotificationListener {
+public class MainActivity extends SuperActivity {
 
 	private static final int REQUEST_ENABLE_BT = 1234;
 
@@ -22,8 +20,6 @@ public class MainActivity extends Activity implements NotificationListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		getActionBar().setBackgroundDrawable(new ColorDrawable(0xffBABACA));
 
 		setContentView(R.layout.main);
 
@@ -53,6 +49,11 @@ public class MainActivity extends Activity implements NotificationListener {
 	}
 
 	@Override
+	protected void onResume() {
+		searchBeaconService.setNotificationListener(this);
+	}
+
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_ENABLE_BT) {
 			if (resultCode == Activity.RESULT_OK) {
@@ -63,11 +64,5 @@ public class MainActivity extends Activity implements NotificationListener {
 			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
-	}
-
-	@Override
-	public void updateNotificationCounter() {
-		// TODO Auto-generated method stub
-
 	}
 }

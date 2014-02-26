@@ -9,7 +9,7 @@ import com.adhub.services.ClienteService;
 
 public abstract class ClienteDAO {
 
-	public static Cliente getCliente(int major) throws ClientProtocolException, IOException {
+	public static Cliente getCliente(int major) {
 		ClienteService clienteService = new ClienteService();
 		Cliente cliente = null;
 		try {

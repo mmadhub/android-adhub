@@ -3,6 +3,8 @@ package com.adhub.objects;
 import java.io.Serializable;
 import java.util.List;
 
+import com.estimote.sdk.Utils.Proximity;
+
 public class Produto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -10,6 +12,7 @@ public class Produto implements Serializable {
 	private Integer minorID;
 	private Integer majorID;
 	private List<Propaganda> propagandas;
+	private Long lastUpdate;
 
 	public Integer getMinorID() {
 		return minorID;
@@ -33,6 +36,24 @@ public class Produto implements Serializable {
 
 	public void setPropagandas(List<Propaganda> propagandas) {
 		this.propagandas = propagandas;
+	}
+
+	public Long getLastUpdate() {
+		return lastUpdate;
+	}
+
+	public void setLastUpdate(Long lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
+
+	public Propaganda getPropaganda(int proximity) {
+		for (Propaganda propaganda : propagandas) {
+			if (propaganda.getProximidade() == proximity && !propaganda.isVisualized()) {
+
+				return propaganda;
+			}
+		}
+		return null;
 	}
 
 }
