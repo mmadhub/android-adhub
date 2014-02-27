@@ -50,7 +50,13 @@ public class MainActivity extends SuperActivity {
 
 	@Override
 	protected void onResume() {
-		searchBeaconService.setNotificationListener(this);
+		super.onResume();
+		try {
+			searchBeaconService.setNotificationListener(this);
+			updateNotificationCounter();
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override

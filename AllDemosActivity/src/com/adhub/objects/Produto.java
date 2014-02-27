@@ -48,7 +48,26 @@ public class Produto implements Serializable {
 
 	public Propaganda getPropaganda(int proximity) {
 		for (Propaganda propaganda : propagandas) {
-			if (propaganda.getProximidade() == proximity && !propaganda.isVisualized()) {
+			if (propaganda.getProximidade() == proximity && !propaganda.isNotified()) {
+
+				return propaganda;
+			}
+		}
+		return null;
+	}
+
+	public void setPropaganda(Propaganda propaganda) {
+		for (int x = 0; x < propagandas.size(); x++) {
+			if (propaganda.getPropagandaID().equals(propagandas.get(x).getPropagandaID())) {
+				propagandas.set(x, propaganda);
+				break;
+			}
+		}
+	}
+
+	public Propaganda getPropagandaById(int ID) {
+		for (Propaganda propaganda : propagandas) {
+			if (propaganda.getPropagandaID() == ID) {
 
 				return propaganda;
 			}

@@ -1,6 +1,10 @@
 package com.adhub.objects;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 public class Cliente implements Serializable {
 
@@ -22,6 +26,7 @@ public class Cliente implements Serializable {
 	private Boolean ativo;
 	private String urlLogo;
 	private Long ultimaAtualizacao;
+	private byte[] logo;
 
 	public Integer getMajorID() {
 		return majorID;
@@ -149,6 +154,18 @@ public class Cliente implements Serializable {
 
 	public void setUltimaAtualizacao(Long ultimaAtualizacao) {
 		this.ultimaAtualizacao = ultimaAtualizacao;
+	}
+
+	public Bitmap getLogo() {
+
+		return BitmapFactory.decodeByteArray(logo, 0, logo.length);
+	}
+
+	public void setLogo(Bitmap logo) {
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		logo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+		this.logo = stream.toByteArray();
 	}
 
 }

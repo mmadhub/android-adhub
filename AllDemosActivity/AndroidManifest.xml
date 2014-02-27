@@ -69,6 +69,7 @@
             </intent-filter>
         </receiver>
         <activity android:name=".activities.PropagandaActivity"></activity>
+        <activity android:name=".activities.NotificationsActivity"></activity>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.adhub.activities;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -10,7 +11,10 @@ import android.view.MenuItem;
 import android.webkit.WebView;
 
 import com.adhub.R;
+import com.adhub.objects.Produto;
+import com.adhub.objects.Propaganda;
 import com.adhub.services.SearchBeaconService;
+import com.adhub.utils.Cache;
 
 public class PropagandaActivity extends SuperActivity {
 
@@ -25,13 +29,10 @@ public class PropagandaActivity extends SuperActivity {
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			String url = extras.getString("url");
+			Propaganda propaganda = (Propaganda) extras.get("propaganda");
 
+			String url = propaganda.getUrl();
 			webView.loadUrl(url);
-
-			String color = extras.getString("color");
-
-			getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(color)));
 
 			String empresa = extras.getString("empresa");
 			Bitmap icon = (Bitmap) extras.get("icon");
@@ -40,6 +41,36 @@ public class PropagandaActivity extends SuperActivity {
 
 			Drawable drawable = new BitmapDrawable(getResources(), icon);
 			getActionBar().setIcon(drawable);
+
+			String color = propaganda.getNavbarColor();
+
+			getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(color)));
+
+			String key = propaganda.getMajorID() + "_" + propaganda.getMinorID();
+
+			Produto produto = (Produto) Cache.readObject(this, key);
+
+			if (!propaganda.isVisualized()) {
+
+				int notificationCounter = getNotificationCounter();
+
+				notificationCounter--;
+
+				if (notificationCounter >= 0) {
+					setNotificationCounter(notificationCounter);
+				}
+				
+				propaganda.setVisualized(true);
+				
+				produto.setPropaganda(propaganda);
+
+				try {
+					Cache.writeObject(this, key, produto);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}
 
 		}
 

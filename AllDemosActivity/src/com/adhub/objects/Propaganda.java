@@ -15,6 +15,7 @@ public class Propaganda implements Serializable {
 	private Integer proximidade;
 	private String navbarColor;
 	private Integer categoria;
+	private boolean notified;
 	private boolean visualized;
 
 	public Integer getPropagandaID() {
@@ -87,6 +88,14 @@ public class Propaganda implements Serializable {
 
 	public void setCategoria(Integer categoria) {
 		this.categoria = categoria;
+	}
+
+	public boolean isNotified() {
+		return notified;
+	}
+
+	public void setNotified(boolean notified) {
+		this.notified = notified;
 	}
 
 	public boolean isVisualized() {

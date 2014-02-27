@@ -119,6 +119,9 @@ public class SearchBeaconService {
 								} catch (IOException e) {
 									e.printStackTrace();
 								}
+								if (produto == null) {
+									return;
+								}
 
 							}
 
@@ -138,18 +141,24 @@ public class SearchBeaconService {
 								break;
 							}
 							Propaganda propaganda = produto.getPropaganda(proximity);
-							if (propaganda != null && !propaganda.isVisualized()) {
+							if (propaganda != null && !propaganda.isNotified()) {
 								HashMap<String, Integer> newAd = new HashMap<String, Integer>();
 								newAd.put("major", produto.getMajorID());
 								newAd.put("minor", produto.getMinorID());
-								newAd.put("propaganda", propaganda.getPropagandaID());
+								newAd.put("propagandaId", propaganda.getPropagandaID());
 
 								newAds.add(newAd);
 
-								propaganda.setVisualized(true);
+								propaganda.setNotified(true);
 
 								try {
 									Cache.writeObject(context, key, produto);
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+
+								try {
+									Cache.writeObject(context, "ads", newAds);
 								} catch (IOException e) {
 									e.printStackTrace();
 								}
@@ -192,7 +201,7 @@ public class SearchBeaconService {
 									HashMap<String, Integer> ad = newAds.get(0);
 									int major = ad.get("major");
 									int minor = ad.get("minor");
-									int propagandaID = ad.get("propaganda");
+									int propagandaID = ad.get("propagandaId");
 
 									String key = major + "_" + minor;
 
@@ -207,17 +216,26 @@ public class SearchBeaconService {
 										}
 									}
 
-									Cliente cliente = ClienteDAO.getCliente(major);
+									Cliente cliente = ClienteDAO.getCliente(context, major);
 
 									title = cliente.getNome();
 									msg = prop.getMensagemNotificacao();
 									icon = getBitmapFromURL(cliente.getUrlLogo());
 									ticker = "Você possui um anúncio não visualizado";
 
+									cliente.setLogo(icon);
+
+									String keyCliente = "Client_" + major;
+
+									try {
+										Cache.writeObject(context, keyCliente, cliente);
+									} catch (IOException e) {
+										e.printStackTrace();
+									}
+
 									notifyIntent = new Intent(context, PropagandaActivity.class);
 									notifyIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-									notifyIntent.putExtra("url", prop.getUrl());
-									notifyIntent.putExtra("color", prop.getNavbarColor());
+									notifyIntent.putExtra("propaganda", prop);
 									notifyIntent.putExtra("empresa", cliente.getNome());
 									notifyIntent.putExtra("icon", icon);
 								} else {

@@ -17,6 +17,9 @@ public abstract class ProdutoDAO {
 		Produto produto = null;
 
 		produto = produtoService.getProduto(major, minor);
+		if (produto == null) {
+			return null;
+		}
 		produto.setLastUpdate(new Date().getTime());
 
 		String key = Cache.makeKey(major, minor);
@@ -24,9 +27,9 @@ public abstract class ProdutoDAO {
 		Produto produtoCached = (Produto) Cache.readObject(context, key);
 		if (produtoCached != null) {
 			for (Propaganda propaganda : produtoCached.getPropagandas()) {
-				if (propaganda != null && propaganda.isVisualized()) {
+				if (propaganda != null && propaganda.isNotified()) {
 					Propaganda propagandaServer = produto.getPropaganda(propaganda.getProximidade());
-					propagandaServer.setVisualized(propaganda.getUltimaAtualizacao() >= propagandaServer.getUltimaAtualizacao());
+					propagandaServer.setNotified(propaganda.getUltimaAtualizacao() >= propagandaServer.getUltimaAtualizacao());
 				}
 			}
 		}

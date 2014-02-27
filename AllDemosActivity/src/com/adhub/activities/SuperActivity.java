@@ -4,6 +4,7 @@ import com.adhub.R;
 import com.adhub.listeners.NotificationListener;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,15 +26,28 @@ public class SuperActivity extends Activity implements NotificationListener {
 		RelativeLayout badgeLayout = (RelativeLayout) menu.findItem(R.id.badge).getActionView();
 		txtNotification = (TextView) badgeLayout.findViewById(R.id.actionbar_notifcation_textview);
 
-		SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, 0);
-		int notificationCounter = settings.getInt(PREFS_NAME, 0);
+		int notificationCounter = getNotificationCounter();
 
 		updateNotificationCounter(notificationCounter);
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	public void toNotifications(View v) {
-		Toast.makeText(this, "Clicou nas notificações", Toast.LENGTH_SHORT).show();
+		Intent intent = new Intent(this, NotificationsActivity.class);
+		startActivity(intent);
+	}
+
+	public int getNotificationCounter() {
+		SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, 0);
+		return settings.getInt(PREFS_NAME, 0);
+	}
+
+	public void setNotificationCounter(int notificationCounter) {
+		SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putInt(PREFS_NAME, notificationCounter);
+
+		editor.commit();
 	}
 
 	@Override
@@ -51,6 +65,14 @@ public class SuperActivity extends Activity implements NotificationListener {
 
 			}
 		});
+
+	}
+
+	@Override
+	public void updateNotificationCounter() {
+		int count = getNotificationCounter();
+
+		updateNotificationCounter(count);
 
 	}
 
